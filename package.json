@@ -1,0 +1,15 @@
+{
+  "name": "univerchat",
+  "version": "0.0.1",
+  "description": "univerchat",
+  "main": "main.js",
+  "scripts": {
+    "start": "./node_modules/.bin/node server.js"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "express": "^4.16.2"
+  },
+  "devDependencies": {}
+}

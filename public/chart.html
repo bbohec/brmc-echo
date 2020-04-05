@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>BRMC Hype Meter</title>
+	<style>
+      html, body {
+        overflow: hidden;
+        height: 100vh;
+      }
+      .main {
+        height: 100vh;
+      }
+    </style>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+  </head>
+</head>
+<body>
+	<div class="container-fluid main text-light bg-dark">
+      <div class="row main">
+        <div class="col-sm-12 text-center align-self-center">
+          <h1>BRMC Hype Meter</h1>
+          <h2>Give Us Feedback about BRMC Program!</h2>
+        </div>
+        <div class="col-sm text-center">
+        	<canvas id="myChart"></canvas>
+        </div>
+      </div>
+  </div>
+	<!-- jQuery first, then Tether, then Bootstrap JS. -->
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" integrity="sha256-c0m8xzX5oOBawsnLVpHnU2ieISOvxi584aNElFl2W6M=" crossorigin="anonymous"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script>
+		var dData = function() {
+		  return Math.round(Math.random() * 90) + 10
+		};
+
+		var barChartData = {
+		  labels: [],
+		  datasets: [{
+		    fillColor: "blue",
+		    strokeColor: "blue",
+		    data: []
+		  }]
+		}
+		var ctx = document.getElementById("myChart").getContext("2d");
+		/*var barChartDemo = new Chart(ctx).Bar(barChartData, {
+		  responsive: true,
+		  barValueSpacing: 2
+		});*/
+		var barChartDemo = new Chart(ctx, {
+		    type: 'line',
+		    data: barChartData,
+		    options: {
+			  responsive: true,
+			  barValueSpacing: 2,
+			  scales:{
+		      	yAxes: [
+		      	{
+		        	gridLines : {
+		            	display : false,
+		            	drawBorder: false,
+		            	drawTicks: false
+		            },
+		            ticks: {
+                		display: false
+            		}
+		        }]
+		      }
+			}
+		});
+		var historyHours = 1;
+		var tickIntervalSeconds = 2; 
+		setInterval(function() {
+		  let dateNow = new Date(Date.now());
+		  let formatedDate = (	("00" + (dateNow.getMonth() + 1)).slice(-2) + "/" + 
+		    					("00" + dateNow.getDate()).slice(-2) + "/" + 
+		    					dateNow.getFullYear() + " " + 
+		    					("00" + dateNow.getHours()).slice(-2) + ":" + 
+		    					("00" + dateNow.getMinutes()).slice(-2) + ":" + 
+		    					("00" + dateNow.getSeconds()).slice(-2)	);
+		  //barChartDemo.removeData();
+		  //console.log(barChartDemo.data.labels.length);
+		  while (barChartDemo.data.labels.length > 3600/tickIntervalSeconds*historyHours) {
+		  		barChartDemo.data.labels.shift();
+			  	barChartDemo.data.datasets.forEach((dataset) => {
+		        	dataset.data.shift();
+		      	});
+		      	console.log ("remove first from chart");
+		  }
+	      axios.get('/hype')
+	        .then(function(response) {
+	          barChartDemo.data.labels.push(formatedDate);
+			  barChartDemo.data.datasets.forEach((dataset) => {
+		        dataset.data.push(response.data.hype);
+		      });
+		      barChartDemo.update();
+	        })
+	        .catch(function(error) {
+	          console.log(error);
+	        })
+		  
+		  //barChartDemo.addData([dData()], formatedDate);
+		  //dateNow.getHours()+":"+dateNow.getMinutes()+":"+dateNow.getSeconds());
+		}, tickIntervalSeconds * 1000);
+	</script>
+	<script>/*
+			(function () {
+				canvas = document.getElementById('myChart');
+				ctx = canvas.getContext("2d");
+				
+				canvas.width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+				canvas.height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+				WIDTH	= canvas.width;
+				HEIGHT	= canvas.height;
+				
+				clearScreen();
+			})();
+			
+			function resizeCanvas() {
+				canvas.width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+				canvas.height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+				
+				WIDTH = canvas.width;
+				HEIGHT = canvas.height;
+				
+				clearScreen();
+			}
+			
+			function clearScreen() {
+				var grd = ctx.createLinearGradient(0,0,0,180);
+				grd.addColorStop(0,"#6666ff");
+				grd.addColorStop(1,"#aaaacc");
+
+				ctx.fillStyle = grd;
+				ctx.fillRect(  0, 0, WIDTH, HEIGHT );
+			}*/
+		</script>
+</body>
+</html>

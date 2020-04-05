@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>BRMC Hype Meter</title>
+    <style>
+      html, body {
+        overflow: hidden;
+        height: 100vh;
+      }
+      .main {
+        height: 100vh;
+      }
+    </style>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+  </head>
+  <body >
+    <div class="container-fluid main text-light bg-dark">
+      <div class="row main">
+        <div class="col-sm-12 text-center align-self-center">
+          <h1>BRMC Hype Meter</h1>
+          <h2>Give Us Feedback about BRMC Program!</h2>
+        </div>
+        <div class="col-sm text-center">
+          <button type="button" class="btn btn-success btn-lg" onclick="like()">I LIKE IT!<br>😍😍😍</button>
+        </div>
+        <div class="col-sm text-center">
+          <button type="button" class="btn btn-danger btn-lg" onclick="hate()">I HATE IT!<br>😡😡😡</button>
+        </div>
+      </div>
+      
+      
+    </div>
+    
+
+
+    <!-- jQuery first, then Tether, then Bootstrap JS. -->
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      function like() {
+        axios.get('/like')
+          .then(function(response) {
+            console.log("😍");
+          })
+          .catch(function(error) {
+            console.log(error);
+          })
+      }
+      function hate() {
+        axios.get('/hate')
+          .then(function(response) {
+            console.log("😡");
+          })
+          .catch(function(error) {
+            console.log(error);
+          })
+      }
+    </script>
+  </body>
+</html>
